@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb')
 const User = require('./User')
+const { sendEmail } = require('../mail')
 
 const usersCollection = require('../db').db().collection('users')
 const followsCollection = require('../db').db().collection('follows')
@@ -51,6 +52,20 @@ Follow.prototype.create = function() {
                 followedId: this.followedId,
                 authorId: new ObjectId(this.authorId)
             })
+
+            const follower = await usersCollection.findOne({ _id: new ObjectId(this.authorId) })
+            const followed = await usersCollection.findOne({ _id: new ObjectId(this.followedId) })
+
+            if (follower && followed) {
+                const subject = `New Follower Alert`
+                const message = `User ${follower.username} has started following you.`
+
+                try {
+                    await sendEmail(followed.email, subject, message)
+                } catch (e) {
+                    console.error("Email error:", e)
+                }
+            }
             
             resolve()
         } else {
