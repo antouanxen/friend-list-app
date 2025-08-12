@@ -6,7 +6,7 @@
 
   <a class="small font-weight-bold" href="/post/<%= post._id %>">&laquo;Back to post permalink</a>
 
-  <form class="mt3" action="/post/<%= post._id %>/edit" method="POST">
+  <form class="spa-form edit-post-form mt3" action="/post/<%= post._id %>/edit" method="POST">
     <div class="form-group">
       <label for="post-title" class="text-muted mb-1"><small>Title</small></label>
       <input required name="title" value="<%= post.title %>" id="post-title" class="form-control form-control-lg form-control-title" type="text" placeholder="" autocomplete="off">
